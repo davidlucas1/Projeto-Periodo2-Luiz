@@ -144,6 +144,48 @@ const selectedCategory = ref('')
 const selectedVendor = ref('')
 
 
+// Dados
+const categories = ref([
+  { id: 'burgers', name: 'Hambúrgueres', icon: '🍔', count: 12 },
+  { id: 'pizzas', name: 'Pizzas', icon: '🍕', count: 8 },
+  { id: 'drinks', name: 'Bebidas', icon: '🥤', count: 15 },
+  { id: 'desserts', name: 'Sobremesas', icon: '🍰', count: 6 },
+  { id: 'snacks', name: 'Lanches', icon: '🌭', count: 10 },
+  { id: 'combos', name: 'Combos', icon: '📦', count: 5 }
+])
+
+const vendors = ref([
+  { id: 'chef-joao', name: 'Chef João', initials: 'CJ', specialty: 'Carnes Premium', rating: 4.8, deliveryTime: '25-35 min', category: 'Churrasco' },
+  { id: 'pizza-master', name: 'Pizza Master', initials: 'PM', specialty: 'Pizzas Artesanais', rating: 4.9, deliveryTime: '30-40 min', category: 'Pizzaria' },
+  { id: 'doces-maria', name: 'Doces Maria', initials: 'DM', specialty: 'Sobremesas', rating: 4.7, deliveryTime: '15-25 min', category: 'Confeitaria' },
+  { id: 'lanches-rapidos', name: 'Lanches Rápidos', initials: 'LR', specialty: 'Lanches', rating: 4.5, deliveryTime: '20-30 min', category: 'Fast Food' }
+])
+
+const products = ref([
+  { id: 1, name: 'Hambúrguer Artesanal', description: 'Carne 180g, queijo, alface, tomate', price: '24,90', rating: 4.8, preparationTime: '15-20 min', category: 'burgers', vendor: 'Chef João', icon: '🍔' },
+  { id: 2, name: 'Pizza Calabresa', description: 'Molho, calabresa, cebola, azeitonas', price: '49,90', rating: 4.9, preparationTime: '25-35 min', category: 'pizzas', vendor: 'Pizza Master', icon: '🍕' },
+  { id: 3, name: 'Coca-Cola 2L', description: 'Refrigerante gelado', price: '12,00', rating: 4.5, preparationTime: '5-10 min', category: 'drinks', vendor: 'Lanches Rápidos', icon: '🥤' },
+  { id: 4, name: 'Brownie com Sorvete', description: 'Brownie quente com sorvete de creme', price: '18,90', rating: 4.7, preparationTime: '10-15 min', category: 'desserts', vendor: 'Doces Maria', icon: '🍫' },
+  { id: 5, name: 'Hot Dog Especial', description: '2 salsichas, purê, batata palha', price: '16,90', rating: 4.6, preparationTime: '12-18 min', category: 'snacks', vendor: 'Lanches Rápidos', icon: '🌭' },
+  { id: 6, name: 'Combo Família', description: '2 pizzas + 2 refrigerantes', price: '89,90', rating: 4.8, preparationTime: '30-40 min', category: 'combos', vendor: 'Pizza Master', icon: '📦' },
+  { id: 7, name: 'Costela no Bafo', description: 'Costela suína temperada', price: '42,90', rating: 4.9, preparationTime: '35-45 min', category: 'burgers', vendor: 'Chef João', icon: '🥩' },
+  { id: 8, name: 'Torta de Limão', description: 'Torta gelada com limão siciliano', price: '14,90', rating: 4.8, preparationTime: '5-10 min', category: 'desserts', vendor: 'Doces Maria', icon: '🍰' }
+])
+
+// Computed
+const filteredProducts = computed(() => {
+  return products.value.filter(product => {
+    const matchesSearch = product.name.toLowerCase().includes(searchTerm.value.toLowerCase()) ||
+                         product.description.toLowerCase().includes(searchTerm.value.toLowerCase())
+    const matchesCategory = !selectedCategory.value || product.category === selectedCategory.value
+    const matchesVendor = !selectedVendor.value ||
+                         vendors.value.find(v => v.id === selectedVendor.value)?.name === product.vendor
+
+    return matchesSearch && matchesCategory && matchesVendor
+  })
+})
+
+
 // Métodos
 const toggleCategory = (categoryId) => {
   selectedCategory.value = selectedCategory.value === categoryId ? '' : categoryId
