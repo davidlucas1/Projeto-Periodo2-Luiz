@@ -16,7 +16,7 @@
       <nav class="p-4">
         <ul class="space-y-2">
           <li>
-            <router-link to="/cardapio" class="flex items-center p-3 rounded-lg hover:bg-yellow-400 transition-colors">
+            <router-link to="/" class="flex items-center p-3 rounded-lg hover:bg-yellow-400 transition-colors">
               <span class="mr-3">🍕</span>
               Cardápio
             </router-link>
@@ -28,7 +28,7 @@
             </a>
           </li>
           <li>
-            <router-link to="/" class="flex items-center p-3 rounded-lg hover:bg-yellow-400 transition-colors">
+            <router-link to="/dashboard" class="flex items-center p-3 rounded-lg hover:bg-yellow-400 transition-colors">
               <span class="mr-3">📊</span>
               Dashboard
             </router-link>

@@ -5,13 +5,13 @@ import FoodsLayout from '../views/FoodsLayout.vue.vue'
 const routes = [
   {
     path: '/',
-    name: 'DashboardLayout',
-    component: DashboardLayout
-  },
-  {
-    path: '/cardapio',
     name: 'FoodsLayout',
     component: FoodsLayout
+  },
+  {
+    path: '/dashboard',
+    name: 'DashboardLayout',
+    component: DashboardLayout
   }
   // Adicione mais rotas conforme necessário
 ]
