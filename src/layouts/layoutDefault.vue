@@ -8,7 +8,7 @@
         <div class="w-40 h-40 bg-red-600 flex items-center justify-center mb-3">
           <span class="text-white text-2xl font-bold">F</span>
         </div>
-        <h2 class="text-2xl font-bold text-red-600">Comida Aqui</h2>
+        <h2 class="text-2xl font-bold text-red-600">Sabor Aqui</h2>
         <p class="text-sm text-gray-600 mt-1">Sabor que delivery</p>
       </div>
 
