@@ -5,8 +5,10 @@
     <div class="w-64 bg-yellow-500 text-yellow-900 shadow-lg">
       <!-- Espaço para Logo -->
       <div class="flex flex-col items-center justify-center p-6 border-b border-yellow-600 bg-white">
-        <div class="w-40 h-40 bg-red-600 flex items-center justify-center mb-3">
-          <span class="text-white text-2xl font-bold">F</span>
+        <div class="w-40 h-40 bg-red-600 flex items-center justify-center mb-3 overflow-hidden rounded-lg">
+          <img src="/imagem/logo.jpg"
+          alt="Sabor Aqui"
+          class="w-full h-full object-cover" >
         </div>
         <h2 class="text-2xl font-bold text-red-600">Sabor Aqui</h2>
         <p class="text-sm text-gray-600 mt-1">Sabor que delivery</p>
@@ -22,10 +24,10 @@
             </router-link>
           </li>
           <li>
-            <a class="flex items-center p-3 rounded-lg hover:bg-yellow-400 transition-colors">
+            <router-link to="/pedido" class="flex items-center p-3 rounded-lg hover:bg-yellow-400 transition-colors">
               <span class="mr-3">📦</span>
               Pedidos
-            </a>
+            </router-link>
           </li>
           <li>
             <router-link to="/dashboard" class="flex items-center p-3 rounded-lg hover:bg-yellow-400 transition-colors">
@@ -60,18 +62,11 @@
           <!-- Botão de Notificações -->
           <button class="btn btn-ghost btn-circle text-white hover:bg-red-700">
             <div class="indicator">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                class="inline-block w-6 h-6 stroke-current"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.161 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"
-                ></path>
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                class="inline-block w-6 h-6 stroke-current">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.161 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9">
+                </path>
               </svg>
               <span class="badge badge-xs badge-warning indicator-item"></span>
             </div>
@@ -84,7 +79,8 @@
                 <span class="font-bold">A</span>
               </div>
             </div>
-            <ul tabindex="0" class="menu menu-sm dropdown-content bg-base-100 rounded-box z-[1] mt-3 w-52 p-2 shadow text-base-content">
+            <ul tabindex="0"
+              class="menu menu-sm dropdown-content bg-base-100 rounded-box z-[1] mt-3 w-52 p-2 shadow text-base-content">
               <li><a>Perfil</a></li>
               <li><a>Configurações</a></li>
               <li><a class="text-red-600 font-bold">Sair</a></li>

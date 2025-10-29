@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import DashboardLayout from '../views/DashboardLayout.vue.vue'
 import FoodsLayout from '../views/FoodsLayout.vue.vue'
+import PedidoLayout from '@/views/PedidoLayout.vue.vue'
 
 const routes = [
   {
@@ -12,7 +13,13 @@ const routes = [
     path: '/dashboard',
     name: 'DashboardLayout',
     component: DashboardLayout
+  },
+    {
+    path: '/pedido',
+    name: 'PedidoLayout',
+    component: PedidoLayout
   }
+
   // Adicione mais rotas conforme necessário
 ]
 
