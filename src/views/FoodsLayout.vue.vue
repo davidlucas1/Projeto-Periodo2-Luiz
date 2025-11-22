@@ -6,6 +6,11 @@
       <p class="text-gray-600">Explore nossos deliciosos produtos</p>
     </div>
 
+    <!-- Status -->
+    <div v-if="loading" class="bg-blue-100 p-4 rounded-lg mb-4">
+      🔄 Carregando cardápio...
+    </div>
+
     <!-- Barra de Pesquisa e Filtros -->
     <div class="bg-white p-4 rounded-lg shadow-md mb-6">
       <div class="flex flex-col md:flex-row gap-4">
@@ -39,7 +44,7 @@
         <div
           v-for="category in categories"
           :key="category.id"
-          :class="`cursor-pointer p-4 rounded-lg text-center transition-all ${selectedCategory === category.id ? 'bg-red-600 text-white' : 'bg-white text-gray-800 shadow-md hover:shadow-lg'}`"
+          :class="cursor-pointer p-4 rounded-lg text-center transition-all ${selectedCategory === category.id ? 'bg-red-600 text-white' : 'bg-white text-gray-800 shadow-md hover:shadow-lg'}"
           @click="toggleCategory(category.id)"
         >
           <div class="text-2xl mb-2">{{ category.icon }}</div>
@@ -49,14 +54,14 @@
       </div>
     </div>
 
-    <!-- Vendedores em Destaque -->
+    <!-- Vendedores -->
     <div class="mb-8">
       <h2 class="text-2xl font-bold mb-4 text-gray-800">👨‍🍳 Nossos Vendedores</h2>
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         <div
           v-for="vendor in vendors"
           :key="vendor.id"
-          :class="`bg-white p-4 rounded-lg shadow-md cursor-pointer transition-all ${selectedVendor === vendor.id ? 'ring-2 ring-red-500' : 'hover:shadow-lg'}`"
+          :class="bg-white p-4 rounded-lg shadow-md cursor-pointer transition-all ${selectedVendor === vendor.id ? 'ring-2 ring-red-500' : 'hover:shadow-lg'}"
           @click="toggleVendor(vendor.id)"
         >
           <div class="flex items-center">
@@ -86,7 +91,7 @@
     <!-- Produtos -->
     <div>
       <div class="flex justify-between items-center mb-4">
-        <h2 class="text-2xl font-bold text-gray-800">🍽️ Produtos</h2>
+        <h2 class="text-2xl font-bold text-gray-800">🍽 Produtos</h2>
         <span class="text-gray-600">{{ filteredProducts.length }} produtos encontrados</span>
       </div>
 
@@ -96,19 +101,17 @@
           :key="product.id"
           class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-all"
         >
-          <!-- Imagem do Produto -->
           <div class="h-40 bg-gray-200 relative">
             <div class="absolute inset-0 flex items-center justify-center text-4xl">
               {{ product.icon }}
             </div>
             <div class="absolute top-2 right-2">
-              <span :class="`badge ${product.vendor === 'Chef João' ? 'badge-primary' : product.vendor === 'Pizza Master' ? 'badge-secondary' : product.vendor === 'Doces Maria' ? 'badge-accent' : 'badge-warning'}`">
+              <span :class="badge ${product.vendor === 'Chef João' ? 'badge-primary' : product.vendor === 'Pizza Master' ? 'badge-secondary' : product.vendor === 'Doces Maria' ? 'badge-accent' : 'badge-warning'}">
                 {{ product.vendor }}
               </span>
             </div>
           </div>
 
-          <!-- Informações do Produto -->
           <div class="p-4">
             <h3 class="font-bold text-lg mb-1">{{ product.name }}</h3>
             <p class="text-gray-600 text-sm mb-2">{{ product.description }}</p>
@@ -136,41 +139,17 @@
 </template>
 
 <script setup>
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted } from 'vue'
+import { dbService } from '../data/database.js'
 
 // Estado
 const searchTerm = ref('')
 const selectedCategory = ref('')
 const selectedVendor = ref('')
-
-
-// Dados
-const categories = ref([
-  { id: 'burgers', name: 'Hambúrgueres', icon: '🍔', count: 12 },
-  { id: 'pizzas', name: 'Pizzas', icon: '🍕', count: 8 },
-  { id: 'drinks', name: 'Bebidas', icon: '🥤', count: 15 },
-  { id: 'desserts', name: 'Sobremesas', icon: '🍰', count: 6 },
-  { id: 'snacks', name: 'Lanches', icon: '🌭', count: 10 },
-  { id: 'combos', name: 'Combos', icon: '📦', count: 5 }
-])
-
-const vendors = ref([
-  { id: 'chef-joao', name: 'Chef João', initials: 'CJ', specialty: 'Carnes Premium', rating: 4.8, deliveryTime: '25-35 min', category: 'Churrasco' },
-  { id: 'pizza-master', name: 'Pizza Master', initials: 'PM', specialty: 'Pizzas Artesanais', rating: 4.9, deliveryTime: '30-40 min', category: 'Pizzaria' },
-  { id: 'doces-maria', name: 'Doces Maria', initials: 'DM', specialty: 'Sobremesas', rating: 4.7, deliveryTime: '15-25 min', category: 'Confeitaria' },
-  { id: 'lanches-rapidos', name: 'Lanches Rápidos', initials: 'LR', specialty: 'Lanches', rating: 4.5, deliveryTime: '20-30 min', category: 'Fast Food' }
-])
-
-const products = ref([
-  { id: 1, name: 'Hambúrguer Artesanal', description: 'Carne 180g, queijo, alface, tomate', price: '24,90', rating: 4.8, preparationTime: '15-20 min', category: 'burgers', vendor: 'Chef João', icon: '🍔' },
-  { id: 2, name: 'Pizza Calabresa', description: 'Molho, calabresa, cebola, azeitonas', price: '49,90', rating: 4.9, preparationTime: '25-35 min', category: 'pizzas', vendor: 'Pizza Master', icon: '🍕' },
-  { id: 3, name: 'Coca-Cola 2L', description: 'Refrigerante gelado', price: '12,00', rating: 4.5, preparationTime: '5-10 min', category: 'drinks', vendor: 'Lanches Rápidos', icon: '🥤' },
-  { id: 4, name: 'Brownie com Sorvete', description: 'Brownie quente com sorvete de creme', price: '18,90', rating: 4.7, preparationTime: '10-15 min', category: 'desserts', vendor: 'Doces Maria', icon: '🍫' },
-  { id: 5, name: 'Hot Dog Especial', description: '2 salsichas, purê, batata palha', price: '16,90', rating: 4.6, preparationTime: '12-18 min', category: 'snacks', vendor: 'Lanches Rápidos', icon: '🌭' },
-  { id: 6, name: 'Combo Família', description: '2 pizzas + 2 refrigerantes', price: '89,90', rating: 4.8, preparationTime: '30-40 min', category: 'combos', vendor: 'Pizza Master', icon: '📦' },
-  { id: 7, name: 'Costela no Bafo', description: 'Costela suína temperada', price: '42,90', rating: 4.9, preparationTime: '35-45 min', category: 'burgers', vendor: 'Chef João', icon: '🥩' },
-  { id: 8, name: 'Torta de Limão', description: 'Torta gelada com limão siciliano', price: '14,90', rating: 4.8, preparationTime: '5-10 min', category: 'desserts', vendor: 'Doces Maria', icon: '🍰' }
-])
+const categories = ref([])
+const vendors = ref([])
+const products = ref([])
+const loading = ref(true)
 
 // Computed
 const filteredProducts = computed(() => {
@@ -185,6 +164,31 @@ const filteredProducts = computed(() => {
   })
 })
 
+onMounted(async () => {
+  try {
+    loading.value = true
+
+    // Inicializar banco e carregar dados
+    await dbService.init()
+    await dbService.initSampleData()
+
+    // Buscar dados
+    categories.value = await dbService.getCategorias()
+    vendors.value = await dbService.getVendedores()
+    products.value = await dbService.getProdutos()
+
+    console.log('✅ Dados carregados:', {
+      categorias: categories.value.length,
+      vendedores: vendors.value.length,
+      produtos: products.value.length
+    })
+
+  } catch (err) {
+    console.error('❌ Erro:', err)
+  } finally {
+    loading.value = false
+  }
+})
 
 // Métodos
 const toggleCategory = (categoryId) => {
