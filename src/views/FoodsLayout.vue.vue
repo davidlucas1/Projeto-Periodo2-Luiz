@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <template>
   <div class="p-6">
     <!-- Cabeçalho -->
@@ -203,3 +204,5 @@ const toggleVendor = (vendorId) => {
 <style scoped>
 /* Estilos específicos do componente */
 </style>
+=======
+>>>>>>> 464234b1db967cf5eaf6ae64b628b84cff8960ee
