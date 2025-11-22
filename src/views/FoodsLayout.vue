@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 <template>
   <div class="p-6">
     <!-- Cabeçalho -->
@@ -16,12 +15,8 @@
     <div class="bg-white p-4 rounded-lg shadow-md mb-6">
       <div class="flex flex-col md:flex-row gap-4">
         <div class="flex-1">
-          <input
-            type="text"
-            placeholder="🔍 Buscar produtos..."
-            class="input input-bordered w-full"
-            v-model="searchTerm"
-          >
+          <input type="text" placeholder="🔍 Buscar produtos..." class="input input-bordered w-full"
+            v-model="searchTerm">
         </div>
         <select class="select select-bordered" v-model="selectedCategory">
           <option value="">Todas as Categorias</option>
@@ -42,12 +37,12 @@
     <div class="mb-8">
       <h2 class="text-2xl font-bold mb-4 text-gray-800">📁 Categorias</h2>
       <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
-        <div
-          v-for="category in categories"
-          :key="category.id"
-          :class="cursor-pointer p-4 rounded-lg text-center transition-all ${selectedCategory === category.id ? 'bg-red-600 text-white' : 'bg-white text-gray-800 shadow-md hover:shadow-lg'}"
-          @click="toggleCategory(category.id)"
-        >
+        <div v-for="category in categories" :key="category.id"
+          :class="[
+            'cursor-pointer p-4 rounded-lg text-center transition-all',
+            selectedCategory === category.id ? 'bg-red-600 text-white' : 'bg-white text-gray-800 shadow-md hover:shadow-lg'
+          ]"
+          @click="toggleCategory(category.id)">
           <div class="text-2xl mb-2">{{ category.icon }}</div>
           <p class="font-semibold">{{ category.name }}</p>
           <p class="text-sm opacity-75">{{ category.count }} itens</p>
@@ -59,12 +54,12 @@
     <div class="mb-8">
       <h2 class="text-2xl font-bold mb-4 text-gray-800">👨‍🍳 Nossos Vendedores</h2>
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        <div
-          v-for="vendor in vendors"
-          :key="vendor.id"
-          :class="bg-white p-4 rounded-lg shadow-md cursor-pointer transition-all ${selectedVendor === vendor.id ? 'ring-2 ring-red-500' : 'hover:shadow-lg'}"
-          @click="toggleVendor(vendor.id)"
-        >
+        <div v-for="vendor in vendors" :key="vendor.id"
+          :class="[
+            'bg-white p-4 rounded-lg shadow-md cursor-pointer transition-all',
+            selectedVendor === vendor.id ? 'ring-2 ring-red-500' : 'hover:shadow-lg'
+          ]"
+          @click="toggleVendor(vendor.id)">
           <div class="flex items-center">
             <div class="w-12 h-12 bg-yellow-500 rounded-full flex items-center justify-center mr-3">
               <span class="text-white font-bold">{{ vendor.initials }}</span>
@@ -97,17 +92,20 @@
       </div>
 
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-        <div
-          v-for="product in filteredProducts"
-          :key="product.id"
-          class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-all"
-        >
+        <div v-for="product in filteredProducts" :key="product.id"
+          class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-all">
           <div class="h-40 bg-gray-200 relative">
             <div class="absolute inset-0 flex items-center justify-center text-4xl">
               {{ product.icon }}
             </div>
             <div class="absolute top-2 right-2">
-              <span :class="badge ${product.vendor === 'Chef João' ? 'badge-primary' : product.vendor === 'Pizza Master' ? 'badge-secondary' : product.vendor === 'Doces Maria' ? 'badge-accent' : 'badge-warning'}">
+              <span
+                :class="[
+                  'badge',
+                  product.vendor === 'Chef João' ? 'badge-primary' :
+                  product.vendor === 'Pizza Master' ? 'badge-secondary' :
+                  product.vendor === 'Doces Maria' ? 'badge-accent' : 'badge-warning'
+                ]">
                 {{ product.vendor }}
               </span>
             </div>
@@ -156,10 +154,10 @@ const loading = ref(true)
 const filteredProducts = computed(() => {
   return products.value.filter(product => {
     const matchesSearch = product.name.toLowerCase().includes(searchTerm.value.toLowerCase()) ||
-                         product.description.toLowerCase().includes(searchTerm.value.toLowerCase())
+      product.description.toLowerCase().includes(searchTerm.value.toLowerCase())
     const matchesCategory = !selectedCategory.value || product.category === selectedCategory.value
     const matchesVendor = !selectedVendor.value ||
-                         vendors.value.find(v => v.id === selectedVendor.value)?.name === product.vendor
+      vendors.value.find(v => v.id === selectedVendor.value)?.name === product.vendor
 
     return matchesSearch && matchesCategory && matchesVendor
   })
@@ -204,5 +202,3 @@ const toggleVendor = (vendorId) => {
 <style scoped>
 /* Estilos específicos do componente */
 </style>
-=======
->>>>>>> 464234b1db967cf5eaf6ae64b628b84cff8960ee

@@ -1,7 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import DashboardLayout from '../views/DashboardLayout.vue.vue'
-import FoodsLayout from '../views/FoodsLayout.vue.vue'
-import PedidoLayout from '@/views/PedidoLayout.vue.vue'
+import DashboardLayout from '../views/DashboardLayout.vue'
+import FoodsLayout from '../views/FoodsLayout.vue'
+import PedidoLayout from '@/views/PedidoLayout.vue'
 
 const routes = [
   {
