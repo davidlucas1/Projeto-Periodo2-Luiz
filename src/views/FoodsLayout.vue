@@ -6,6 +6,22 @@
       <p class="text-gray-600">Explore nossos deliciosos produtos</p>
     </div>
 
+    <!-- Notificações -->
+    <div class="fixed top-4 right-4 z-50 space-y-2">
+      <div
+        v-for="(notificacao, index) in notificacoes"
+        :key="index"
+        class="alert shadow-lg w-80"
+        :class="{
+          'alert-success': notificacao.tipo === 'sucesso',
+          'alert-error': notificacao.tipo === 'erro',
+          'alert-info': notificacao.tipo === 'info',
+        }"
+      >
+        <span>{{ notificacao.mensagem }}</span>
+      </div>
+    </div>
+
     <!-- Status -->
     <div v-if="loading" class="bg-blue-100 p-4 rounded-lg mb-4">
       🔄 Carregando cardápio...
@@ -125,7 +141,7 @@
 
             <div class="flex justify-between items-center">
               <span class="text-sm text-gray-500">{{ product.preparationTime }}</span>
-              <button class="btn btn-primary btn-sm">
+              <button class="btn btn-primary btn-sm" @click="adicionarAoCarrinho(product)">
                 <span class="mr-1">+</span>
                 Adicionar
               </button>
@@ -149,6 +165,7 @@ const categories = ref([])
 const vendors = ref([])
 const products = ref([])
 const loading = ref(true)
+const notificacoes = ref([])
 
 // Computed
 const filteredProducts = computed(() => {
@@ -162,6 +179,46 @@ const filteredProducts = computed(() => {
     return matchesSearch && matchesCategory && matchesVendor
   })
 })
+
+// Métodos
+const mostrarNotificacao = (mensagem, tipo = "sucesso") => {
+  notificacoes.value.push({ mensagem, tipo })
+  setTimeout(() => {
+    notificacoes.value.shift()
+  }, 3000)
+}
+
+const toggleCategory = (categoryId) => {
+  selectedCategory.value = selectedCategory.value === categoryId ? '' : categoryId
+}
+
+const toggleVendor = (vendorId) => {
+  selectedVendor.value = selectedVendor.value === vendorId ? '' : vendorId
+}
+
+const adicionarAoCarrinho = async (produto) => {
+  try {
+    const novoPedido = {
+      cliente: "Cliente",
+      endereco: "Endereço de entrega",
+      itens: [
+        {
+          nome: produto.name,
+          preco: parseFloat(produto.price.replace(',', '.'))
+        }
+      ]
+    }
+
+    await dbService.addPedido(novoPedido)
+    console.log('✅ Produto adicionado ao pedido:', produto.name)
+
+    mostrarNotificacao(`✅ ${produto.name} adicionado aos pedidos!`, "sucesso")
+
+  } catch (error) {
+    console.error('❌ Erro ao adicionar pedido:', error)
+    mostrarNotificacao('❌ Erro ao adicionar pedido', "erro")
+  }
+}
 
 onMounted(async () => {
   try {
@@ -184,19 +241,11 @@ onMounted(async () => {
 
   } catch (err) {
     console.error('❌ Erro:', err)
+    mostrarNotificacao('❌ Erro ao carregar dados', "erro")
   } finally {
     loading.value = false
   }
 })
-
-// Métodos
-const toggleCategory = (categoryId) => {
-  selectedCategory.value = selectedCategory.value === categoryId ? '' : categoryId
-}
-
-const toggleVendor = (vendorId) => {
-  selectedVendor.value = selectedVendor.value === vendorId ? '' : vendorId
-}
 </script>
 
 <style scoped>

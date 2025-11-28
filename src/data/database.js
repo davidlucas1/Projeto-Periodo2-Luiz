@@ -94,15 +94,42 @@ export class DatabaseService {
   }
 
   async addPedido(pedido) {
-    return this.add('pedidos', pedido);
+    const pedidoComTimestamp = {
+      ...pedido,
+      timestamp: new Date().toISOString(),
+      status: 'pendente'
+    };
+    return this.add('pedidos', pedidoComTimestamp);
   }
 
   async deletePedido(id) {
     return this.delete('pedidos', id);
   }
 
+  async updatePedidoStatus(id, status) {
+    return new Promise((resolve, reject) => {
+      const transaction = this.db.transaction(['pedidos'], 'readwrite');
+      const store = transaction.objectStore('pedidos');
+      const request = store.get(id);
+
+      request.onerror = () => reject(request.error);
+      request.onsuccess = () => {
+        const pedido = request.result;
+        if (pedido) {
+          pedido.status = status;
+          const updateRequest = store.put(pedido);
+          updateRequest.onerror = () => reject(updateRequest.error);
+          updateRequest.onsuccess = () => resolve(updateRequest.result);
+        } else {
+          reject(new Error('Pedido não encontrado'));
+        }
+      };
+    });
+  }
+
   async initSampleData() {
     const existingProdutos = await this.getProdutos();
+    const existingPedidos = await this.getPedidos();
 
     if (existingProdutos.length === 0) {
       const categorias = [
@@ -143,7 +170,9 @@ export class DatabaseService {
       for (const produto of produtos) {
         await this.addProduto(produto);
       }
+    }
 
+    if (existingPedidos.length === 0) {
       const pedidos = [
         {
           cliente: "Maria Oliveira",
@@ -151,7 +180,9 @@ export class DatabaseService {
           itens: [
             { nome: "X-Burger", preco: 18.5 },
             { nome: "Batata Média", preco: 9.0 },
-          ]
+          ],
+          status: 'pendente',
+          timestamp: new Date().toISOString()
         },
         {
           cliente: "João Silva",
@@ -159,7 +190,9 @@ export class DatabaseService {
           itens: [
             { nome: "Pizza Calabresa", preco: 32.0 },
             { nome: "Coca-Cola 1L", preco: 8.0 },
-          ]
+          ],
+          status: 'pendente',
+          timestamp: new Date().toISOString()
         }
       ];
 
